@@ -71,7 +71,7 @@ export default function BlockfuseFaucet() {
               disabled={isPending}
               className="mt-4 px-6 py-3 bg-green-500 text-white rounded-full disabled:bg-gray-400"
             >
-              {isPending ? "Claiming..." : "Claim 0.01 ETH"}
+              {isPending ? "Claiming..." : "Claim 0.001 ETH"}
             </button>
           ) : (
             <button
