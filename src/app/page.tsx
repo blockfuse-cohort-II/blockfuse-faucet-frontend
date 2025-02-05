@@ -70,7 +70,7 @@ export default function BlockfuseFaucet() {
       {/* Header */}
       <header className="w-full flex justify-between items-center p-6 bg-white shadow-md">
         <div className="flex items-center gap-2">
-          <p className="text-lg font-bold">Blockfuse Labs</p>
+          <p className="text-lg font-bold">Katera Faucet</p>
         </div>
         {isConnected ? (
           <button onClick={() => disconnect()} className="px-4 py-2 bg-red-500 text-white rounded">
@@ -90,39 +90,39 @@ export default function BlockfuseFaucet() {
       <div className="flex w-full flex-col lg:flex-row items-center justify-center py-16">
         {/* NFT Minting Section */}
         <div className="flex-1 flex flex-col items-center p-6 text-center">
-          <h1 className="text-4xl font-bold">Mint Your Blockfuse Labs NFT</h1>
-          {mintError && <p className="text-red-500">{mintError.message}</p>}
-          <button
-            onClick={() =>
-              mintNFT({
-                address: formattedNftAddress,
-                abi: nftAbi,
-                functionName: "mint",
-                args: [formattedAddress], // Mint NFT for the connected wallet
-              })
-            }
-            disabled={
-              isMinting ||
-              !isConnected ||
-              (ownsNFT !== undefined && Number(ownsNFT) > 0) || // Disable if the user already owns an NFT
-              isCheckingOwnership
-            }
-            className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-full disabled:bg-gray-400"
-          >
-            {isMinting
-              ? "Minting..."
-              : ownsNFT !== undefined && Number(ownsNFT) > 0
-                ? "You already own an NFT"
-                : isCheckingOwnership
-                  ? "Checking ownership..."
-                  : "Mint Blockfuse Labs NFT"}
-          </button>
-        </div>
+        <h1 className="text-4xl font-bold">Mint Your Katera NFT</h1>
+        {mintError && <p className="text-red-500">{mintError.message}</p>}
+        <button
+          onClick={() =>
+            mintNFT({
+              address: formattedNftAddress,
+              abi: nftAbi,
+              functionName: "mint",
+              args: [formattedAddress], // Mint NFT for the connected wallet
+            })
+          }
+          disabled={
+            isMinting ||
+            !isConnected ||
+            (ownsNFT !== undefined && Number(ownsNFT) > 0) || // Disable if the user already owns an NFT
+            isCheckingOwnership
+          }
+          className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-full disabled:bg-gray-400"
+        >
+          {isMinting
+            ? "Minting..."
+            : ownsNFT !== undefined && Number(ownsNFT) > 0
+            ? "You already own an NFT"
+            : isCheckingOwnership
+            ? "Checking ownership..."
+            : "Mint Blockfuse Labs NFT"}
+        </button>
+      </div>
 
         {/* Faucet Claim Section */}
         <div className="flex-1 flex flex-col items-center p-6 text-center">
           <h2 className="text-2xl font-semibold">Claim Free Sepolia ETH</h2>
-          <p className="text-gray-600 mt-2">You must own a Blockfuse NFT to claim.</p>
+          <p className="text-gray-600 mt-2">You must own a Katera NFT to claim.</p>
 
           {claimError && <p className="text-red-500">{claimError.message}</p>}
 
