@@ -2,7 +2,7 @@
 export const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_CONTRACT!;
 export const nftAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT!;
 
-export const faucetAbi = [
+/*export const faucetAbi2 = [
   // Core faucet functions
   "function claimETH() external",
   "function getBalance() public view returns (uint256)",
@@ -14,6 +14,51 @@ export const faucetAbi = [
   
   // State variables
   "function lastClaimedTimestamp(address) public view returns (uint256)",
+] as const;*/
+
+export const faucetAbi = [
+  {
+    "inputs": [],
+    "name": "claimETH",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function",
+  },
+  {
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function",
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "user", "type": "address" }],
+    "name": "ownsNFT",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function",
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function",
+  },
+  {
+    "inputs": [],
+    "name": "withdrawFunds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function",
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "lastClaimedTimestamp",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function",
+  },
 ] as const;
 
 export const nftAbi = [

@@ -46,7 +46,7 @@ export default function BlockfuseFaucet() {
   const canClaim =
     ownsNFT && Number(ownsNFT) > 0 && // User must own at least one NFT
     (!lastClaimedTimestamp || // If no previous claim
-      (lastClaimedTimestamp.data &&
+      (!lastClaimedTimestamp.data ||
         typeof lastClaimedTimestamp.data === "bigint" &&
         BigInt(lastClaimedTimestamp.data) + BigInt(86400) <= BigInt(Math.floor(Date.now() / 1000)))); // Cooldown period (24 hours)
 
@@ -63,6 +63,7 @@ export default function BlockfuseFaucet() {
   console.log("Owns NFT:", ownsNFT, ownsNftError);
   console.log("Faucet Balance:", faucetBalance, faucetBalanceError, isFaucetBalanceLoading);
   console.log("Last Claimed Timestamp:", lastClaimedTimestamp);
+  console.log("Last claimed data:", lastClaimedTimestamp.data);
   console.log("Can Claim:", canClaim);
 
   return (
