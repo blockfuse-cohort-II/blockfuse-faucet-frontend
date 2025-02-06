@@ -1,14 +1,14 @@
 "use client";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { injected } from "wagmi/connectors";
+import FaucetComponets from "./components/FaucetComponets";
+import Header from "./components/Header";
+
 import { useReadContract, useWriteContract } from "wagmi";
 import { ethers } from "ethers";
 import { faucetAbi, nftAbi, faucetAddress, nftAddress } from "../utils/contracts";
 
 export default function BlockfuseFaucet() {
   const { address, isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
-  const { disconnect } = useDisconnect();
   const formattedAddress = address as `0x${string}`;
   const formattedFaucetAddress = faucetAddress as `0x${string}`;
   const formattedNftAddress = nftAddress as `0x${string}`;
@@ -63,29 +63,16 @@ export default function BlockfuseFaucet() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 text-black">
       {/* Header */}
-      <header className="w-full flex justify-between items-center p-6 bg-white shadow-md">
-        <div className="flex items-center gap-2">
-          <p className="text-lg font-bold">Blockfuse Labs</p>
-        </div>
-        {isConnected ? (
-          <button onClick={() => disconnect()} className="px-4 py-2 bg-red-500 text-white rounded">
-            Disconnect ({formattedAddress.slice(0, 6)}...{formattedAddress.slice(-4)})
-          </button>
-        ) : (
-          <button
-            onClick={() => connect({ connector: connectors?.[0] || injected() })}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Connect Wallet
-          </button>
-        )}
-      </header>
+      <Header/>
 
+   
       {/* Main Section */}
       <div className="flex w-full flex-col lg:flex-row items-center justify-center py-16">
+        <FaucetComponets/>z
+
         {/* NFT Minting Section */}
-        <div className="flex-1 flex flex-col items-center p-6 text-center">
-        <h1 className="text-4xl font-bold">Mint Your Blockfuse Labs NFT</h1>
+        {/* <div className="flex-1 flex flex-col items-center p-6 text-center">
+        <h1 className="text-4xl font-bold">Mint Your Katera NFT To Claim Free Sepolia</h1>
         {mintError && <p className="text-red-500">{mintError.message}</p>}
         <button
           onClick={() =>
@@ -93,13 +80,13 @@ export default function BlockfuseFaucet() {
               address: formattedNftAddress,
               abi: nftAbi,
               functionName: "mint",
-              args: [formattedAddress], // Mint NFT for the connected wallet
+              args: [formattedAddress], 
             })
           }
           disabled={
             isMinting ||
             !isConnected ||
-            (ownsNFT !== undefined && Number(ownsNFT) > 0) || // Disable if the user already owns an NFT
+            (ownsNFT !== undefined && Number(ownsNFT) > 0) || 
             isCheckingOwnership
           }
           className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-full disabled:bg-gray-400"
@@ -112,10 +99,10 @@ export default function BlockfuseFaucet() {
             ? "Checking ownership..."
             : "Mint Blockfuse Labs NFT"}
         </button>
-      </div>
+      </div> */}
 
         {/* Faucet Claim Section */}
-        <div className="flex-1 flex flex-col items-center p-6 text-center">
+        {/* <div className="flex-1 flex flex-col items-center p-6 text-center">
           <h2 className="text-2xl font-semibold">Claim Free Sepolia ETH</h2>
           <p className="text-gray-600 mt-2">You must own a Blockfuse NFT to claim.</p>
 
@@ -150,7 +137,7 @@ export default function BlockfuseFaucet() {
               You need to mint an NFT first
             </button>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
