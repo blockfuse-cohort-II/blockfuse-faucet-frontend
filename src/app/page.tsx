@@ -13,7 +13,7 @@ export default function BlockfuseFaucet() {
    
       {/* Main Section */}
       <div className="flex w-full flex-col lg:flex-row items-center justify-center py-16">
-        <FaucetComponets/>z
+        <FaucetComponets/>
       </div>
     </div>
   );
