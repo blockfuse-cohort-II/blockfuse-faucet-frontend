@@ -7,7 +7,7 @@ export default function Faucet() {
   const { address, isConnected } = useAccount();
   const [balance, setBalance] = useState("0");
 
-  const formattedAddress = address as `0x${string}` | undefined; // ✅ Explicit type assertion
+  const formattedAddress = address; // ✅ Explicit type assertion
   const formattedFaucetAddress = faucetAddress as `0x${string}`;
   const formattedNftAddress = nftAddress as `0x${string}`;
 

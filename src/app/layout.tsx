@@ -5,6 +5,7 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 import { sepolia } from "wagmi/chains";
 import "./globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { metaMask } from "wagmi/connectors";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,6 +20,7 @@ const geistMono = Geist_Mono({
 // ✅ Define the Wagmi Config
 const config = createConfig({
   chains: [sepolia],
+  connectors: [metaMask()],
   transports: {
     [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL),
   },
@@ -51,17 +53,17 @@ export default function RootLayout({
           href="/favicon.ico"
         />
       </head>
-      <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={config}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={config}>
 
           {children}
-      </body>
           </WagmiProvider>
         </QueryClientProvider>
+      </body>
     </html>
   );
 }

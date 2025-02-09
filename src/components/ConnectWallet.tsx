@@ -22,7 +22,10 @@ export default function ConnectWallet() {
         </>
       ) : (
         <button
-          onClick={() => connect({ connector: connectors[0] })} // ✅ Use first available connector
+          onClick={() => {
+            alert("clicked");
+            connect({ connector: connectors[0] });
+          }} // ✅ Use first available connector
           className="px-4 py-2 bg-purple-500 text-white rounded"
         >
           Connect Wallet
