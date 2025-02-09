@@ -24,11 +24,6 @@ const config = createConfig({
   },
 });
 
-// export const metadata: Metadata = {
-//   title: "Blockfuse Faucet APp",
-//   description: "Claim free ETH from the Sepolia Faucet",
-// };
-
 
 // ✅ Initialize QueryClient
 const queryClient = new QueryClient();
@@ -40,16 +35,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta charSet="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+        />
+        <meta
+          name="description"
+          content="A simple faucet for the Sepolia testnet."
+        />
+        <title>Katera Faucet</title>
+        <link
+          rel="icon"
+          href="/favicon.ico"
+        />
+      </head>
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={config}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        {/* ✅ Wrap the entire app with WagmiProvider */}
-        <QueryClientProvider client={queryClient}>
 
-        <WagmiProvider config={config}>{children}</WagmiProvider>
-        </QueryClientProvider>
+          {children}
       </body>
+          </WagmiProvider>
+        </QueryClientProvider>
     </html>
   );
 }
