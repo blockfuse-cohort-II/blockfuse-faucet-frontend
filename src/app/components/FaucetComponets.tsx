@@ -196,12 +196,12 @@ const FaucetComponets = () => {
 
         {(mintError && (
           <div className="p-4 bg-red-50 text-red-800 rounded-lg text-sm">
-            {mintError.message}
+            {mintError.message?.split('.')[0]}
           </div>
         )) ||
           (claimError && (
             <div className="p-4 bg-red-50 text-red-800 rounded-lg text-sm">
-              {claimError.message}
+              {claimError.message?.split('.')[0]}
             </div>
           ))}
 
