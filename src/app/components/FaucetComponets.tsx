@@ -7,93 +7,120 @@ import {
   faucetAddress,
   nftAddress,
 } from "../../utils/contracts";
+import { useEffect, useState } from "react";
 
 const FaucetComponets = () => {
-  /*const [hasNFT, setHasNFT] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [claimingNFT, setClaimingNFT] = useState(false);
-    const [error, setError] = useState('');*/
-
   const { address, isConnected } = useAccount();
   const formattedAddress = address as `0x${string}`;
   const formattedFaucetAddress = faucetAddress as `0x${string}`;
   const formattedNftAddress = nftAddress as `0x${string}`;
 
-  // Check if the user owns an NFT
+  const [canClaim, setCanClaim] = useState(false);
+
   const {
     data: ownsNFT,
     isLoading: isCheckingOwnership,
-    error: ownsNftError,
   } = useReadContract({
     address: formattedNftAddress,
     abi: nftAbi,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
   });
-  console.log(ownsNftError);
 
-  // Get the faucet balance
-  const {
-    data: faucetBalance,
-    error: faucetBalanceError,
-    isLoading: isFaucetBalanceLoading,
-  } = useReadContract({
-    address: formattedFaucetAddress,
-    abi: faucetAbi,
-    functionName: "getBalance",
-  });
+  // const {
+  //   data: faucetBalance,
+  //   error: faucetBalanceError,
+  //   isLoading: isFaucetBalanceLoading,
+  // } = useReadContract({
+  //   address: formattedFaucetAddress,
+  //   abi: faucetAbi,
+  //   functionName: "getBalance",
+  // });
 
-  console.log(faucetBalance, faucetBalanceError, isFaucetBalanceLoading);
-  // Get the last claimed timestamp for the user
   const lastClaimedTimestamp = useReadContract({
     address: formattedFaucetAddress,
     abi: faucetAbi,
     functionName: "lastClaimedTimestamp",
     args: address ? [address] : undefined,
+    query: { enabled: true },
   });
 
-  // Calculate if the user can claim ETH
-  const canClaim =
-    ownsNFT &&
-    Number(ownsNFT) > 0 && // User must own at least one NFT
-    (!lastClaimedTimestamp || // If no previous claim
-      !lastClaimedTimestamp.data ||
-      (typeof lastClaimedTimestamp.data === "bigint" &&
-        BigInt(lastClaimedTimestamp.data) + BigInt(86400) <=
-          BigInt(Math.floor(Date.now() / 1000)))); // Cooldown period (24 hours)
-
-  // Write contract for claiming ETH
   const {
     writeContract: claimETH,
     isPending: isClaiming,
     error: claimError,
+    status: claimStatus,
   } = useWriteContract();
 
-  // Write contract for minting NFTs
   const {
     writeContract: mintNFT,
     isPending: isMinting,
     error: mintError,
   } = useWriteContract();
 
-  /*const handleNFTClaim = async () => {
-      setClaimingNFT(true);
-      setError('');
-    
-      setTimeout(() => {
-        setHasNFT(true);
-        setClaimingNFT(false);
-      }, 2000);
-    };
-  
-    const handleFaucetClaim = async () => {
-      setIsLoading(true);
-      setError('');
-      
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    };*/
+  useEffect(() => {
+    if (claimStatus === "success") {
+      lastClaimedTimestamp.refetch();
+    }
+  }, [lastClaimedTimestamp,claimStatus]);
+
+  useEffect(() => {
+    if (
+      ownsNFT &&
+      Number(ownsNFT) > 0 &&
+      (!lastClaimedTimestamp?.data ||
+        (typeof lastClaimedTimestamp.data === "bigint" &&
+          BigInt(lastClaimedTimestamp.data) + BigInt(86400) <= BigInt(Math.floor(Date.now() / 1000))))
+    ) {
+      setCanClaim(true);
+    } else {
+      setCanClaim(false);
+    }
+  }, [ownsNFT, lastClaimedTimestamp]);
+
+  const renderMintButton = () => {
+    if (isMinting) {
+      return (
+        <span className="flex items-center justify-center gap-2">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Claiming NFT...
+        </span>
+      );
+    }
+
+    if (ownsNFT && Number(ownsNFT) > 0) {
+      return "NFT Claimed";
+    }
+
+    if (isCheckingOwnership) {
+      return "Checking Ownership...";
+    }
+
+    return "Claim Access NFT";
+  };
+
+  const renderClaimButton = () => {
+    if (isClaiming) {
+      return (
+        <>
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Claiming...
+        </>
+      );
+    }
+
+    if (canClaim) {
+      return (
+        <>
+          <Droplets className="w-4 h-4" />
+          Claim 0.001 Sepolia ETH
+        </>
+      );
+    }
+
+    return <>Claim 0.001 Sepolia ETH (Cooldown Active)</>;
+  };
+
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
       <div className="text-center space-y-2">
@@ -141,18 +168,7 @@ const FaucetComponets = () => {
               }
               className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-indigo-300 transition-colors"
             >
-              {isMinting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Claiming NFT...
-                </span>
-              ) : ownsNFT && Number(ownsNFT) > 0 ? (
-                "NFT Claimed"
-              ) : isCheckingOwnership ? (
-                "Checking Ownership..."
-              ) : (
-                "Claim Access NFT"
-              )}
+              {renderMintButton()}
             </button>
           </div>
         ) : (
@@ -173,19 +189,7 @@ const FaucetComponets = () => {
               disabled={isClaiming || !canClaim}
               className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-blue-300 transition-colors flex items-center justify-center gap-2"
             >
-              {isClaiming ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Claiming...
-                </>
-              ) : canClaim ? (
-                <>
-                  <Droplets className="w-4 h-4" />
-                  Claim 0.001 Sepolia ETH
-                </>
-              ) : (
-                <>Claim 0.001 Sepolia ETH (Cooldown Active)</>
-              )}
+              {renderClaimButton()}
             </button>
           </div>
         )}

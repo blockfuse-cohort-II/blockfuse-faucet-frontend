@@ -1,11 +1,10 @@
 "use client"
-// import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { sepolia } from "wagmi/chains";
 import "./globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { metaMask } from "wagmi/connectors";
+import { metaMask,coinbaseWallet,} from "wagmi/connectors";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +19,7 @@ const geistMono = Geist_Mono({
 // ✅ Define the Wagmi Config
 const config = createConfig({
   chains: [sepolia],
-  connectors: [metaMask()],
+  connectors: [metaMask({dappMetadata:{name: 'Katera Faucet',}}), coinbaseWallet({appName: 'Katera Faucet'}), ],
   transports: {
     [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL),
   },
