@@ -177,7 +177,8 @@ const FaucetComponets = () => {
               <p className="text-sm text-purple-500">
                 You can now claim Sepolia ETH for testing purposes
               </p>
-              <p>{process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL}</p>
+              {process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL ? <p>{process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL}</p> : <>Nothing the here mr man</>}
+              
             </div>
             <button
               onClick={() => {
