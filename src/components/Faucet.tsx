@@ -14,9 +14,9 @@ export default function Faucet() {
   const { data: ownsNFT } = useReadContract({
     address: formattedNftAddress,
     abi: nftAbi,
-    functionName: "balanceOf",
-    // functionName: "ownerOf",
-    args: formattedAddress ? [formattedAddress] : undefined, // ✅ Ensuring correct type
+    // functionName: "balanceOf",
+    functionName: "ownerOf",
+    args: formattedAddress ? [BigInt(formattedAddress)] : undefined, // ✅ Ensuring correct type
   });
 
   const { 
